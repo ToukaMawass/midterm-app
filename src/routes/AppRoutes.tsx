@@ -10,8 +10,11 @@ import Dashboard from "../pages/main/Dashboard";
 import AuthGuard from "../guards/AuthGuard";
 import GuestGuard from "../guards/GuestGuard";
 
+// Layouts
+import AuthLayout from "../layouts/AuthLayout";
+import MainLayout from "../layouts/MainLayout";
+
 function AppRoutes() {
-  // 🔐 AUTH STATE
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   return (
@@ -23,7 +26,9 @@ function AppRoutes() {
           path="/login"
           element={
             <GuestGuard isLoggedIn={isLoggedIn}>
-              <Login setIsLoggedIn={setIsLoggedIn} />
+              <AuthLayout>
+                <Login setIsLoggedIn={setIsLoggedIn} />
+              </AuthLayout>
             </GuestGuard>
           }
         />
@@ -32,7 +37,9 @@ function AppRoutes() {
           path="/signup"
           element={
             <GuestGuard isLoggedIn={isLoggedIn}>
-              <Signup />
+              <AuthLayout>
+                <Signup />
+              </AuthLayout>
             </GuestGuard>
           }
         />
@@ -42,7 +49,9 @@ function AppRoutes() {
           path="/dashboard"
           element={
             <AuthGuard isLoggedIn={isLoggedIn}>
-              <Dashboard />
+              <MainLayout>
+                <Dashboard />
+              </MainLayout>
             </AuthGuard>
           }
         />
