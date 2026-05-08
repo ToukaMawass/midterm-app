@@ -1,73 +1,149 @@
-# React + TypeScript + Vite
+# 🧠 Midterm Project — React Full Stack Frontend App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## 📌 Overview
 
-Currently, two official plugins are available:
+This project is a React-based frontend application built for the midterm exam.  
+It demonstrates routing, authentication flow, state management, UI design systems, and data grid integration.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+The application simulates a basic admin system with login protection, dashboards, and interactive data operations.
 
-## React Compiler
+---
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 🏗️ Architecture
 
-## Expanding the ESLint configuration
+The project is structured into clear layers:
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### 1. Entry Layer
+- `main.tsx` initializes React app
+- Global styling (Sass)
+- Toast notification system
+- Theme provider integration
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### 2. Routing Layer
+- `AppRoutes.tsx`
+- Defines all routes:
+  - `/login`
+  - `/signup`
+  - `/dashboard`
+  - `/profile`
+  - `/settings`
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+### 3. Guard System
+- `AuthGuard`: protects private routes
+- `GuestGuard`: prevents logged-in users from accessing auth pages
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+### 4. Layout System
+- `AuthLayout`: used for login/signup pages
+- `MainLayout`: used for dashboard and main pages
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### 5. Pages
+- Authentication pages (Login / Signup)
+- Main pages (Dashboard / Profile / Settings)
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+---
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## 🔐 Authentication Flow
+
+- User must login through `/login`
+- Email must include `@`
+- Password must be at least 5 characters
+- Confirmation popup before login
+- Simulated loading delay (2 seconds)
+- Authentication state stored using React state
+
+---
+
+## 📊 Dashboard Features
+
+The dashboard uses **AG Grid** for table management.
+
+Features include:
+- Display user data
+- Toggle user status (Active / Inactive)
+- Delete rows dynamically
+- Toast notifications for all actions
+
+---
+
+## 🎨 Styling System
+
+Instead of Tailwind, the project uses **Sass (SCSS)**:
+
+- Global styles in `main.scss`
+- Reusable UI classes:
+  - `.full-screen`
+  - `.card`
+  - `.btn`
+- Clean layout system
+
+---
+
+## 🔔 Notifications
+
+A reusable toast system is implemented using `react-hot-toast`.
+
+- Success messages
+- Error alerts
+- Loading indicators
+
+All triggered via a reusable helper function.
+
+---
+
+## 🧠 Technologies Used
+
+- React
+- TypeScript
+- React Router
+- Sass (SCSS)
+- AG Grid
+- React Hot Toast
+- Material UI (theme support)
+
+---
+
+## 📂 Project Structure
+
+---
+
+## 🚀 Key Concepts Demonstrated
+
+- Component-based architecture
+- Protected routing (Auth system)
+- State management with hooks
+- CRUD operations in UI
+- Reusable UI system
+- Separation of concerns
+- Clean Git commit workflow
+
+---
+
+## 🧾 Git Strategy
+
+Each feature was developed in incremental commits:
+
+- Authentication system
+- Styling system migration
+- Dashboard implementation
+- CRUD functionality
+- TypeScript refactoring
+
+---
+
+## 👨‍💻 Author Notes
+
+This project focuses on:
+- clean architecture
+- scalable structure
+- real-world frontend patterns
+- exam-level implementation quality
+
+---
+
+## ✅ Status
+
+✔ Fully functional frontend system  
+✔ Authentication flow implemented  
+✔ Dashboard with CRUD operations  
+✔ Styled with Sass  
+✔ Type-safe components
