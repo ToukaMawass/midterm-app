@@ -1,7 +1,4 @@
 import { useState } from "react";
-import { AgGridReact } from "ag-grid-react";
-import type { ColDef, ICellRendererParams } from "ag-grid-community";
-
 import { showToast } from "@components/Toast";
 
 type RowData = {
@@ -11,93 +8,86 @@ type RowData = {
 };
 
 function Dashboard() {
-  const [rowData, setRowData] = useState<RowData[]>([
+  const [data, setData] = useState<RowData[]>([
     { id: 1, name: "John", status: "Active" },
     { id: 2, name: "Sara", status: "Inactive" },
     { id: 3, name: "Ali", status: "Active" },
   ]);
 
-  const deleteRow = (id: number) => {
-    setRowData((prev) => prev.filter((row) => row.id !== id));
-    showToast("success", "Row deleted successfully");
+  // DELETE
+  const deleteItem = (id: number) => {
+    setData((prev) => prev.filter((item) => item.id !== id));
+    showToast("success", "Deleted successfully");
   };
 
+  // TOGGLE
   const toggleStatus = (id: number) => {
-    setRowData((prev) =>
-      prev.map((row) =>
-        row.id === id
+    setData((prev) =>
+      prev.map((item) =>
+        item.id === id
           ? {
-              ...row,
-              status: row.status === "Active" ? "Inactive" : "Active",
+              ...item,
+              status: item.status === "Active" ? "Inactive" : "Active",
             }
-          : row
+          : item
       )
     );
 
     showToast("success", "Status updated");
   };
 
-  const columnDefs: ColDef<RowData>[] = [
-    { field: "id", headerName: "ID" },
-    { field: "name", headerName: "Name" },
-    { field: "status", headerName: "Status" },
-
-    {
-      headerName: "Actions",
-      cellRenderer: (params: ICellRendererParams<RowData>) => {
-        const data = params.data;
-
-        if (!data) return null;
-
-        return (
-          <div style={{ display: "flex", gap: "8px" }}>
-
-            <button
-              onClick={() => toggleStatus(data.id)}
-              style={{
-                padding: "4px 8px",
-                background: "#f59e0b",
-                color: "white",
-                border: "none",
-                borderRadius: "4px",
-                cursor: "pointer",
-              }}
-            >
-              Toggle
-            </button>
-
-            <button
-              onClick={() => deleteRow(data.id)}
-              style={{
-                padding: "4px 8px",
-                background: "#dc2626",
-                color: "white",
-                border: "none",
-                borderRadius: "4px",
-                cursor: "pointer",
-              }}
-            >
-              Delete
-            </button>
-
-          </div>
-        );
-      },
-    },
-  ];
-
   return (
     <div style={{ padding: "20px" }}>
-
       <h1 style={{ marginBottom: "20px" }}>Dashboard</h1>
 
-      <div className="ag-theme-alpine" style={{ height: 420, width: "100%" }}>
-        <AgGridReact<RowData>
-          rowData={rowData}
-          columnDefs={columnDefs}
-        />
-      </div>
+      {/* SIMPLE TABLE UI */}
+      <table style={{ width: "100%", borderCollapse: "collapse" }}>
+        <thead>
+          <tr style={{ background: "#eee" }}>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
 
+        <tbody>
+          {data.map((item) => (
+            <tr key={item.id} style={{ textAlign: "center" }}>
+              <td>{item.id}</td>
+              <td>{item.name}</td>
+              <td>{item.status}</td>
+
+              <td>
+                <button
+                  onClick={() => toggleStatus(item.id)}
+                  style={{
+                    marginRight: "10px",
+                    padding: "5px 10px",
+                    background: "orange",
+                    color: "white",
+                    border: "none",
+                  }}
+                >
+                  Toggle
+                </button>
+
+                <button
+                  onClick={() => deleteItem(item.id)}
+                  style={{
+                    padding: "5px 10px",
+                    background: "red",
+                    color: "white",
+                    border: "none",
+                  }}
+                >
+                  Delete
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 }

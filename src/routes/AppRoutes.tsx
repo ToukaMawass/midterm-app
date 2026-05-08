@@ -1,92 +1,65 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { useState } from "react";
 
-// AUTH PAGES
 import Login from "../pages/auth/Login";
 import Signup from "../pages/auth/Signup";
 
-// MAIN PAGES
 import Dashboard from "../pages/main/Dashboard";
-import Profile from "../pages/main/Profile";
 import Settings from "../pages/main/Settings";
+import Profile from "../pages/main/Profile";
 
-// GUARDS
-import AuthGuard from "../guards/AuthGuard";
-import GuestGuard from "../guards/GuestGuard";
+type Props = {
+  isLoggedIn: boolean;
+  setIsLoggedIn: (value: boolean) => void;
+};
 
-// LAYOUTS
-import AuthLayout from "../layouts/AuthLayout";
-import MainLayout from "../layouts/MainLayout";
-
-function AppRoutes() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
+function AppRoutes({ isLoggedIn, setIsLoggedIn }: Props) {
   return (
     <BrowserRouter>
       <Routes>
 
-        {/* 🔥 DEFAULT ROUTE → REDIRECT TO LOGIN */}
-        <Route path="/" element={<Navigate to="/login" replace />} />
+        {/* ROOT REDIRECT (IMPORTANT FIX) */}
+        <Route
+          path="/"
+          element={
+            isLoggedIn ? (
+              <Navigate to="/dashboard" />
+            ) : (
+              <Navigate to="/login" />
+            )
+          }
+        />
 
-        {/* 🔐 AUTH ROUTES */}
+        {/* AUTH */}
         <Route
           path="/login"
-          element={
-            <GuestGuard isLoggedIn={isLoggedIn}>
-              <AuthLayout>
-                <Login setIsLoggedIn={setIsLoggedIn} />
-              </AuthLayout>
-            </GuestGuard>
-          }
+          element={<Login setIsLoggedIn={setIsLoggedIn} />}
         />
+        <Route path="/signup" element={<Signup />} />
 
-        <Route
-          path="/signup"
-          element={
-            <GuestGuard isLoggedIn={isLoggedIn}>
-              <AuthLayout>
-                <Signup />
-              </AuthLayout>
-            </GuestGuard>
-          }
-        />
-
-        {/* 🏠 MAIN ROUTES */}
+        {/* MAIN (PROTECTED) */}
         <Route
           path="/dashboard"
           element={
-            <AuthGuard isLoggedIn={isLoggedIn}>
-              <MainLayout>
-                <Dashboard />
-              </MainLayout>
-            </AuthGuard>
-          }
-        />
-
-        <Route
-          path="/profile"
-          element={
-            <AuthGuard isLoggedIn={isLoggedIn}>
-              <MainLayout>
-                <Profile />
-              </MainLayout>
-            </AuthGuard>
+            isLoggedIn ? <Dashboard /> : <Navigate to="/login" />
           }
         />
 
         <Route
           path="/settings"
           element={
-            <AuthGuard isLoggedIn={isLoggedIn}>
-              <MainLayout>
-                <Settings />
-              </MainLayout>
-            </AuthGuard>
+            isLoggedIn ? <Settings /> : <Navigate to="/login" />
           }
         />
 
-        {/* 🚫 CATCH ALL (optional but good practice) */}
-        <Route path="*" element={<Navigate to="/login" replace />} />
+        <Route
+          path="/profile"
+          element={
+            isLoggedIn ? <Profile /> : <Navigate to="/login" />
+          }
+        />
+
+        {/* FALLBACK */}
+        <Route path="*" element={<Navigate to="/" />} />
 
       </Routes>
     </BrowserRouter>
