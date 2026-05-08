@@ -6,67 +6,88 @@ type LoginProps = {
 };
 
 function Login({ setIsLoggedIn }: LoginProps) {
-  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleLogin = () => {
-    const confirmLogin = window.confirm("Are you sure you want to log in?");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-    if (!confirmLogin) {
-      navigate("/login");
-      return;
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const validate = () => {
+    if (!email.includes("@")) {
+      setError("Email must include @");
+      return false;
     }
+
+    if (password.length < 5) {
+      setError("Password must be at least 5 characters");
+      return false;
+    }
+
+    setError("");
+    return true;
+  };
+
+  const handleLogin = () => {
+    if (!validate()) return;
 
     setLoading(true);
 
     setTimeout(() => {
       setIsLoggedIn(true);
+      setLoading(false);
       navigate("/dashboard");
-    }, 3000);
+    }, 2000);
+  };
+
+  const confirmLogin = () => {
+    const ok = window.confirm("Are you sure you want to log in?");
+    if (ok) handleLogin();
   };
 
   return (
-    <div className="flex items-center justify-center h-screen bg-gray-100">
+    <div className="full-screen">
 
-      {/* LOGIN CARD */}
-      <div className="w-[340px] bg-white p-8 rounded-xl shadow-md">
+      <div className="card">
 
-        {/* TITLE */}
-        <h2 className="text-2xl font-bold text-center mb-6">
+        <h2 style={{ textAlign: "center", marginBottom: "20px" }}>
           Login
         </h2>
 
-        {/* INPUTS */}
-        <div className="flex flex-col gap-3 mb-5">
-          <input
-            type="text"
-            placeholder="Username"
-            className="border rounded px-3 py-2 outline-none focus:border-blue-500"
-          />
-          <input
-            type="password"
-            placeholder="Password"
-            className="border rounded px-3 py-2 outline-none focus:border-blue-500"
-          />
-        </div>
+        <input
+          className="input"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
 
-        {/* BUTTON / LOADING */}
-        {loading ? (
-          <div className="flex flex-col items-center gap-2">
-            <div className="h-8 w-8 border-4 border-gray-300 border-t-blue-600 rounded-full animate-spin"></div>
-            <p className="text-sm text-gray-500">Logging in...</p>
-          </div>
-        ) : (
-          <button
-            onClick={handleLogin}
-            className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition"
-          >
-            Login
-          </button>
-        )}
+        <input
+          className="input"
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+
+        {error && <div className="error">{error}</div>}
+
+        <button
+          className="btn btn-primary"
+          disabled={loading}
+          onClick={confirmLogin}
+        >
+          {loading ? (
+            <span style={{ display: "flex", justifyContent: "center" }}>
+              <span className="spinner"></span>
+              <span style={{ marginLeft: "8px" }}>Loading...</span>
+            </span>
+          ) : (
+            "Login"
+          )}
+        </button>
 
       </div>
-
     </div>
   );
 }

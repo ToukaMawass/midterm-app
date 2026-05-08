@@ -1,10 +1,19 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import './index.css'
-import App from './App.tsx'
+import React from "react";
+import ReactDOM from "react-dom/client";
+import App from "./App";
 
-createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <App />
-  </StrictMode>,
-)
+import "./styles/main.scss";
+
+import { ThemeProvider } from "@mui/material/styles";
+import { theme } from "./theme/theme";
+
+import { Toaster } from "react-hot-toast";
+
+ReactDOM.createRoot(document.getElementById("root")!).render(
+  <React.StrictMode>
+    <ThemeProvider theme={theme}>
+      <Toaster position="top-right" />
+      <App />
+    </ThemeProvider>
+  </React.StrictMode>
+);
